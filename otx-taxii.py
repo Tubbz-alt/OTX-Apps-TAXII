@@ -46,8 +46,8 @@ def sendTAXII(first=True):
                 mtimestamp = pulse["modified"]
             st = StixExport(pulse)
             st.build()
-                certukingest.inbox_package(
-                    config.get('ingest', 'uri'), st.to_xml())
+            certukingest.inbox_package(
+                config.get('ingest', 'uri'), st.to_xml())
         saveTimestamp(mtimestamp)
     else:
         pulses = otx.getsince(mtimestamp)
