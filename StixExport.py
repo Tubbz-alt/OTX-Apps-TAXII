@@ -10,8 +10,7 @@ from lxml import etree as et
 from stix.common import Identity, InformationSource
 from stix.common.vocabs import PackageIntent
 from stix.core import STIXHeader, STIXPackage
-from stix.exploit_target import Vulnerability
-from stix.indicator import CompositeIndicatorExpression, Indicator
+from stix.indicator import Indicator
 from stix.utils import set_id_namespace
 
 PULSE_SERVER_BASE = "https://otx.alienvault.com/"
@@ -56,9 +55,9 @@ class StixExport:
 
         for p_indicator in self.pulse["indicators"]:
             if p_indicator["type"] in self.hash_translation:
-                new_ind = Indicator()
-                new_ind.description = p_indicator["description"]
-                new_ind.title = "%s from %spulse/%s" % (
+                indicator = Indicator()
+                indicator.description = p_indicator["description"]
+                indicator.title = "%s from %spulse/%s" % (
                     p_indicator["indicator"], PULSE_SERVER_BASE, str(self.pulse["id"]))
                 file_ = File()
                 hash_ = Hash(p_indicator["indicator"], self.hash_translation[
@@ -67,27 +66,27 @@ class StixExport:
                 observable_ = Observable(file_)
 
             elif p_indicator["type"] in self.address_translation:
-                new_ind = Indicator()
-                new_ind.description = p_indicator["description"]
-                new_ind.title = "%s from %spulse/%s" % (
+                indicator = Indicator()
+                indicator.description = p_indicator["description"]
+                indicator.title = "%s from %spulse/%s" % (
                     p_indicator["indicator"], PULSE_SERVER_BASE, str(self.pulse["id"]))
                 ipv4_ = Address.from_dict({'address_value': p_indicator["indicator"],
                                            'category': self.address_translation[p_indicator["type"]]})
                 observable_ = Observable(ipv4_)
 
             elif p_indicator["type"] in self.name_translation:
-                new_ind = Indicator()
-                new_ind.description = p_indicator["description"]
-                new_ind.title = "%s from %spulse/%s" % (
+                indicator = Indicator()
+                indicator.description = p_indicator["description"]
+                indicator.title = "%s from %spulse/%s" % (
                     p_indicator["indicator"], PULSE_SERVER_BASE, str(self.pulse["id"]))
                 domain_ = DomainName.from_dict(
                     {'value': p_indicator["indicator"], 'type': 'FQDN'})
                 observable_ = Observable(domain_)
 
             elif p_indicator["type"] == "URL":
-                new_ind = Indicator()
-                new_ind.description = p_indicator["description"]
-                new_ind.title = "%s from %spulse/%s" % (
+                indicator = Indicator()
+                indicator.description = p_indicator["description"]
+                indicator.title = "%s from %spulse/%s" % (
                     p_indicator["indicator"], PULSE_SERVER_BASE, str(self.pulse["id"]))
                 url_ = URI.from_dict(
                     {'value': p_indicator["indicator"], 'type': URI.TYPE_URL})
