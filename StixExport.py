@@ -1,3 +1,9 @@
+"""
+Builds a STIX Package from an AlienVault OTX Pulse.
+
+The script will build a STIX package from a given pulse.
+"""
+
 from cybox.common import Hash, Time
 from cybox.core import Observable
 from cybox.objects.address_object import Address
@@ -6,8 +12,10 @@ from cybox.objects.file_object import File
 from cybox.objects.mutex_object import Mutex
 from cybox.objects.uri_object import URI
 from stix.common import Identity, InformationSource
-from stix.common.vocabs import PackageIntent
 from stix.core import STIXHeader, STIXPackage
+from stix.data_marking import Marking, MarkingSpecification
+from stix.extensions.marking.simple_marking import SimpleMarkingStructure
+from stix.extensions.marking.tlp import TLPMarkingStructure
 from stix.indicator import Indicator
 from stix.report import Header, Report
 from stix.utils import set_id_namespace
@@ -18,9 +26,11 @@ set_id_namespace(STIXNAMESPACE)
 IDENTITY_NAME = "Alienvault OTX"
 
 
-class StixExport:
+class StixExport(object):
+    """Implementation of the STIX creation."""
 
     def __init__(self, pulse):
+        """Define the STIX Package."""
         self.stix_package = STIXPackage()
         self.stix_header = STIXHeader()
         self.pulse = pulse
@@ -32,8 +42,24 @@ class StixExport:
         self.name_translation = {
             "domain": URI.TYPE_DOMAIN, "hostname": URI.TYPE_DOMAIN}
 
+    def _marking(self):
+        """Define the TLP marking and the inheritance."""
+        marking_specification = MarkingSpecification()
+        tlp = TLPMarkingStructure()
+        tlp.color = self.pulse["TLP"].upper()
+        marking_specification.marking_structures.append(tlp)
+        marking_specification.controlled_structure = "../../../../descendant-or-self::node() | ../../../../descendant-or-self::node()/@*"
+        simple = SimpleMarkingStructure()
+        simple.statement = "Automated ingest from AlienVault OTX."
+        marking_specification.marking_structures.append(simple)
+        handling = Marking()
+        handling.add_marking(marking_specification)
+        return handling
+
     def build(self):
+        """Define the STIX report."""
         self.stix_package.stix_header = self.stix_header
+        self.stix_package.stix_header.handling = self._marking()
         self.report = Report()
         self.report.header = Header()
         self.report.header.title = self.pulse["name"]
@@ -191,4 +217,5 @@ class StixExport:
         self.stix_package.add_report(self.report)
 
     def to_xml(self):
+        """Return XML."""
         return self.stix_package.to_xml()
