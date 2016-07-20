@@ -1,12 +1,10 @@
 from cybox.common import Hash, Time
-from cybox.core import Observable, Observables
+from cybox.core import Observable
 from cybox.objects.address_object import Address
 from cybox.objects.domain_name_object import DomainName
 from cybox.objects.file_object import File
 from cybox.objects.mutex_object import Mutex
 from cybox.objects.uri_object import URI
-from IPy import *
-from lxml import etree as et
 from stix.common import Identity, InformationSource
 from stix.common.vocabs import PackageIntent
 from stix.core import STIXHeader, STIXPackage
@@ -25,7 +23,8 @@ class StixExport:
         self.stix_package = STIXPackage()
         self.stix_header = STIXHeader()
         self.pulse = pulse
-        self.hash_translation = {"FileHash-MD5": Hash.TYPE_MD5, "FileHash-SHA1": Hash.TYPE_SHA1,
+        self.hash_translation = {"FileHash-MD5": Hash.TYPE_MD5,
+                                 "FileHash-SHA1": Hash.TYPE_SHA1,
                                  "FileHash-SHA256": Hash.TYPE_SHA256}
         self.address_translation = {
             "IPv4": Address.CAT_IPV4, "IPv6": Address.CAT_IPV6}
@@ -53,7 +52,6 @@ class StixExport:
         emails = False
         domains = False
         urls = False
-        mails = False
         mutex = False
 
         hash_indicator = Indicator()
@@ -171,39 +169,21 @@ class StixExport:
                 mutex_indicator.description = p_indicator["indicator"]
                 mutex = True
 
-# elif p_indicator["type"] == "CIDR":
-#     nrange = IP(p_indicator["indicator"])
-#     nrange_values = nrange.strNormal(3).replace("-", ",")
-#     ipv4_ = Address.from_dict(
-#         {'address_value': nrange_values, 'category': Address.CAT_IPV4})
-#     ipv4_.address_value.condition = "InclusiveBetween"
-#     observable_ = Observable(ipv4_)
-
-
             else:
                 continue
 
-            # mind = Indicator()
-# mind.description = p_indicator["description"]
-# mind.title = "%s from %spulse/%s" % (
-#     p_indicator["indicator"], PULSE_SERVER_BASE, str(self.pulse["id"]))
-# observable_.title = "%s - %s" % (
-#     p_indicator["type"], p_indicator["indicator"])
-# mind.add_observable(observable_)
-# self.stix_package.add_indicator(mind)
-
-            if hashes:
-                self.stix_package.add_indicator(hash_indicator)
-            if addresses:
-                self.stix_package.add_indicator(address_indicator)
-            if domains:
-                self.stix_package.add_indicator(domain_indicator)
-            if urls:
-                self.stix_package.add_indicator(url_indicator)
-            if emails:
-                self.stix_package.add_indicator(email_indicator)
-            if mutex:
-                self.stix_package.add_indicator(mutex_indicator)
+        if hashes:
+            self.stix_package.add_indicator(hash_indicator)
+        if addresses:
+            self.stix_package.add_indicator(address_indicator)
+        if domains:
+            self.stix_package.add_indicator(domain_indicator)
+        if urls:
+            self.stix_package.add_indicator(url_indicator)
+        if emails:
+            self.stix_package.add_indicator(email_indicator)
+        if mutex:
+            self.stix_package.add_indicator(mutex_indicator)
 
     def to_xml(self):
         return self.stix_package.to_xml()
