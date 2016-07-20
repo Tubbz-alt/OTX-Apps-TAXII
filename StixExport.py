@@ -154,11 +154,6 @@ class StixExport:
                 email_indicator.description = p_indicator["indicator"]
                 emails = True
 
-            # elif p_indicator["type"] == "CVE":
-            #    vuln_ = Vulnerability()
-            #    vuln_.cveid = p_indicator["indicator"].upper()
-            #    observable_ = Observable(vuln_)
-
             elif p_indicator["type"] == "Mutex":
                 mutex = Mutex()
                 mutex.name = p_indicator["indicator"]
