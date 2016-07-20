@@ -62,6 +62,7 @@ class StixExport:
         hash_indicator.set_received_time(self.pulse["modified"])
         hash_indicator.title = "[OTX] [Files] " + self.pulse["name"]
         hash_indicator.add_indicator_type("File Hash Watchlist")
+        hash_indicator.confidence = "Low"
 
         address_indicator = Indicator()
         address_indicator.set_producer_identity(IDENTITY_NAME)
@@ -69,6 +70,7 @@ class StixExport:
         address_indicator.set_received_time(self.pulse["modified"])
         address_indicator.title = "[OTX] [IP] " + self.pulse["name"]
         address_indicator.add_indicator_type("IP Watchlist")
+        address_indicator.confidence = "Low"
 
         domain_indicator = Indicator()
         domain_indicator.set_producer_identity(IDENTITY_NAME)
@@ -76,6 +78,7 @@ class StixExport:
         domain_indicator.set_received_time(self.pulse["modified"])
         domain_indicator.title = "[OTX] [Domain] " + self.pulse["name"]
         domain_indicator.add_indicator_type("Domain Watchlist")
+        domain_indicator.confidence = "Low"
 
         url_indicator = Indicator()
         url_indicator.set_producer_identity(IDENTITY_NAME)
@@ -83,6 +86,7 @@ class StixExport:
         url_indicator.set_received_time(self.pulse["modified"])
         url_indicator.title = "[OTX] [URL] " + self.pulse["name"]
         url_indicator.add_indicator_type("URL Watchlist")
+        url_indicator.confidence = "Low"
 
         email_indicator = Indicator()
         email_indicator.set_producer_identity(IDENTITY_NAME)
@@ -90,6 +94,7 @@ class StixExport:
         email_indicator.set_received_time(self.pulse["modified"])
         email_indicator.title = "[OTX] [Email] " + self.pulse["name"]
         email_indicator.add_indicator_type("Malicious E-mail")
+        email_indicator.confidence = "Low"
 
         mutex_indicator = Indicator()
         mutex_indicator.set_producer_identity(IDENTITY_NAME)
@@ -97,6 +102,7 @@ class StixExport:
         mutex_indicator.set_received_time(self.pulse["modified"])
         mutex_indicator.title = "[OTX] [Mutex] " + self.pulse["name"]
         mutex_indicator.add_indicator_type("Malware Artifacts")
+        mutex_indicator.confidence = "Low"
 
         for p_indicator in self.pulse["indicators"]:
             if p_indicator["type"] in self.hash_translation:
