@@ -65,7 +65,7 @@ class StixExport(object):
         self.stix_header.information_source.time = Time()
         self.stix_header.information_source.time.received_time = self.pulse[
             "modified"]
-        self.stix_header.information_source.time.produced_time = self.report.timestamp
+        self.stix_header.information_source.time.produced_time = self.stix_package.timestamp
         self.stix_header.information_source.identity = Identity()
         self.stix_header.information_source.identity.name = IDENTITY_NAME
         # self.stix_package.stix_header = self.stix_header
