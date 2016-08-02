@@ -58,22 +58,32 @@ class StixExport(object):
 
     def build(self):
         """Define the STIX report."""
-        self.stix_package.stix_header = self.stix_header
-        self.stix_package.stix_header.handling = self._marking()
-        self.report = Report()
-        self.report.header = Header()
-        self.report.header.title = self.pulse["name"]
-        self.report.header.descriptions = self.pulse["description"]
-        self.report.header.intents = "Indicators"
-        self.report.header.short_description = "%spulse/%s" % (
-            PULSE_SERVER_BASE, str(self.pulse["id"]))
-        self.report.header.information_source = InformationSource()
-        self.report.header.information_source.time = Time()
-        self.report.header.information_source.time.received_time = self.pulse[
+        self.stix_header.title = self.pulse["name"]
+        self.stix_header.description = self.pulse["description"]
+        self.stix_header.package_intents = "Indicators"
+        self.stix_header.information_source = InformationSource()
+        self.stix_header.information_source.time = Time()
+        self.stix_header.information_source.time.received_time = self.pulse[
             "modified"]
-        self.report.header.information_source.time.produced_time = self.report.timestamp
-        self.report.header.information_source.identity = Identity()
-        self.report.header.information_source.identity.name = IDENTITY_NAME
+        self.stix_header.information_source.time.produced_time = self.report.timestamp
+        self.stix_header.information_source.identity = Identity()
+        self.stix_header.information_source.identity.name = IDENTITY_NAME
+        # self.stix_package.stix_header = self.stix_header
+        # self.stix_package.stix_header.handling = self._marking()
+        # self.report = Report()
+        # self.report.header = Header()
+        # self.report.header.title = self.pulse["name"]
+        # self.report.header.descriptions = self.pulse["description"]
+        # self.report.header.intents = "Indicators"
+        # self.report.header.short_description = "%spulse/%s" % (
+        #     PULSE_SERVER_BASE, str(self.pulse["id"]))
+        # self.report.header.information_source = InformationSource()
+        # self.report.header.information_source.time = Time()
+        # self.report.header.information_source.time.received_time = self.pulse[
+        #     "modified"]
+        # self.report.header.information_source.time.produced_time = self.report.timestamp
+        # self.report.header.information_source.identity = Identity()
+        # self.report.header.information_source.identity.name = IDENTITY_NAME
 
         hashes = False
         addresses = False
@@ -202,19 +212,19 @@ class StixExport(object):
                 continue
 
         if hashes:
-            self.report.add_indicator(hash_indicator)
+            self.stix_package.add_indicator(hash_indicator)
         if addresses:
-            self.report.add_indicator(address_indicator)
+            self.stix_package.add_indicator(address_indicator)
         if domains:
-            self.report.add_indicator(domain_indicator)
+            self.stix_package.add_indicator(domain_indicator)
         if urls:
-            self.report.add_indicator(url_indicator)
+            self.stix_package.add_indicator(url_indicator)
         if emails:
-            self.report.add_indicator(email_indicator)
+            self.stix_package.add_indicator(email_indicator)
         if mutex:
-            self.report.add_indicator(mutex_indicator)
+            self.stix_package.add_indicator(mutex_indicator)
 
-        self.stix_package.add_report(self.report)
+        # self.stix_package.add_report(self.report)
 
     def to_xml(self):
         """Return XML."""
