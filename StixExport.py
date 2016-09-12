@@ -189,7 +189,7 @@ class StixExport(object):
 
             elif p_indicator["type"] == "email":
                 email = Address()
-                email.value = p_indicator["indicator"]
+                email.address_value = p_indicator["indicator"]
                 email.category = "e-mail"
                 email.address_value.condition = "Equals"
                 email_obs = Observable(email)
