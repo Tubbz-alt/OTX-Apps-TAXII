@@ -151,7 +151,10 @@ class StixExport(object):
                     str(file_object.hashes[0].type_) + \
                     " - " + p_indicator["indicator"]
                 hash_indicator.add_observable(file_obs)
-                hash_indicator.description = p_indicator["description"]
+                try:
+                    hash_indicator.description = p_indicator["description"]
+                except KeyError:
+                    hash_indicator.description = ""
                 hashes = True
 
             elif p_indicator["type"] in self.address_translation:
@@ -162,7 +165,10 @@ class StixExport(object):
                 ip_obs = Observable(ip)
                 ip_obs.title = "Address: " + str(ip.address_value)
                 address_indicator.add_observable(ip_obs)
-                address_indicator.description = p_indicator["description"]
+                try:
+                    address_indicator.description = p_indicator["description"]
+                except KeyError:
+                    address_indicator.description = ""
                 addresses = True
 
             elif p_indicator["type"] in self.name_translation:
@@ -173,7 +179,10 @@ class StixExport(object):
                 domain_obs = Observable(domain)
                 domain_obs.title = "Domain: " + str(domain.value)
                 domain_indicator.add_observable(domain_obs)
-                domain_indicator.description = p_indicator["description"]
+                try:
+                    domain_indicator.description = p_indicator["description"]
+                except KeyError:
+                    domain_indicator.description = ""
                 domains = True
 
             elif p_indicator["type"] == "URL":
@@ -184,7 +193,10 @@ class StixExport(object):
                 url_obs = Observable(url)
                 url_obs.title = "URI: " + str(url.value)
                 url_indicator.add_observable(url_obs)
-                url_indicator.description = p_indicator["description"]
+                try:
+                    url_indicator.description = p_indicator["description"]
+                except KeyError:
+                    url_indicator.description = ""
                 urls = True
 
             elif p_indicator["type"] == "email":
@@ -195,7 +207,10 @@ class StixExport(object):
                 email_obs = Observable(email)
                 email_obs.title = "Address: " + str(email.address_value)
                 email_indicator.add_observable(email_obs)
-                email_indicator.description = p_indicator["indicator"]
+                try:
+                    email_indicator.description = p_indicator["indicator"]
+                except KeyError:
+                    email_indicator.description = ""
                 emails = True
 
             elif p_indicator["type"] == "Mutex":
@@ -205,7 +220,10 @@ class StixExport(object):
                 mutex_obs = Observable(mutex)
                 mutex_obs.title = "Mutex: " + str(mutex.name)
                 mutex_indicator.add_observable(mutex_obs)
-                mutex_indicator.description = p_indicator["indicator"]
+                try:
+                    mutex_indicator.description = p_indicator["indicator"]
+                except KeyError:
+                    mutex_indicator.description = ""
                 mutex = True
 
             else:
